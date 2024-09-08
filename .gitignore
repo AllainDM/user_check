@@ -1,0 +1,12 @@
+# ide
+.idea/
+__pycache__/
+
+# Конфиг
+config.py
+
+# Папки ТО
+west
+north
+south
+east
