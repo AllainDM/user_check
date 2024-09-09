@@ -24,12 +24,12 @@ data_users = {
 # Создание сессии, получение токена и авторизация
 
 session_users = requests.Session()
-print(f"session_users {session_users}")
+# print(f"session_users {session_users}")
 
 req = session_users.get(url_login_get)
 
 soup = BeautifulSoup(req.content, 'html.parser')
-print("###################")
+# print("###################")
 scripts = soup.find_all('script')
 csrf_token = None
 for script in scripts:
@@ -41,17 +41,17 @@ for script in scripts:
             if val == "_csrf:":
                 csrf = script_lst[num + 1]
                 csrf_token = csrf[1:-3]
-print(f"csrf {csrf_token}")
+# print(f"csrf {csrf_token}")
 
 
 def create_users_sessions():
     while True:
         try:
             data_users["_csrf"] = csrf_token
-            print(f"data_users {data_users}")
+            # print(f"data_users {data_users}")
             response_users2 = session_users.post(url_login, data=data_users, headers=HEADERS).text
-            print("Сессия Юзера создана 2")
-            print(f"response_users2 {response_users2}")
+            # print("Сессия Юзера создана 2")
+            # print(f"response_users2 {response_users2}")
             return response_users2
         except ConnectionError:
             print("Ошибка создания сессии")
@@ -79,7 +79,7 @@ def get_html(to):
                  f"additional_field_task3_value4=193&additional_field_task3_value2=99&"
                  f"additional_field_task3_value99=%d0%ad%d0%bb%d0%b5%d0%ba%d1%82%d1%80%d0%be%d0%bd%d0%a2%d0%b5%d0%bb%d0%b5%d0%ba%d0%be%d0%bc&"
                  f"additional_field_task3_value=&desc=1&sort=datedo&sort_typer=1")
-    print(link_west)
+    # print(link_west)
 
     link = ""
     if to == "west":
@@ -97,8 +97,8 @@ def get_html(to):
     try:
         with open(f'{to}/list_numbers.json', 'r') as f:
             list_old_numbers_date = json.load(f)
-        print("Список номеров заявок обновлен из файла")
-        print(f"list_numbers {list_old_numbers_date}")
+        # print("Список номеров заявок обновлен из файла")
+        # print(f"list_numbers {list_old_numbers_date}")
     except FileNotFoundError:
         print(f"Файл '{to}/list_numbers.json' не найден")
 
@@ -106,26 +106,26 @@ def get_html(to):
     try:
         with open(f'{to}/list_all.json', 'r') as f:
             list_all_old = json.load(f)
-        print("Список заявок обновлен из файла 'list_all.json'")
-        print(f"list_all_old {list_all_old}")
+        # print("Список заявок обновлен из файла 'list_all.json'")
+        # print(f"list_all_old {list_all_old}")
     except FileNotFoundError:
         print(f"Файл '{to}/list_all.json' не найден.")
 
 
     try:
-        print("Проверяем сессию. 1")
+        # print("Проверяем сессию. 1")
         HEADERS["_csrf"] = csrf_token
-        print(f"HEADERS: {HEADERS}")
-        print("Пытаемся получить страничку")
-        print(f"Токен: {csrf}")
+        # print(f"HEADERS: {HEADERS}")
+        # print("Пытаемся получить страничку")
+        # print(f"Токен: {csrf}")
         html = session_users.get(link, headers=HEADERS)
         answer = []
         if html.status_code == 200:
-            print("Код ответа 200")
+            # print("Код ответа 200")
             soup = BeautifulSoup(html.text, 'lxml')
             # print(f"soup {soup}")
             table = soup.find_all('tr', class_="cursor_pointer")
-            print(f"Количество карточек: {len(table)}")
+            # print(f"Количество карточек: {len(table)}")
             for i in table:  # Цикл по списку всей таблицы
                 txt_msg_one = ""
                 # print(i)
@@ -187,8 +187,8 @@ def get_html(to):
                                      f"{z[2]}\n\n"
                                      f"------------------------------------------\n\n")
                 if text_err != "":
-                    text_err = ("------------------------------------------\n\n"
-                                "Внимание, обнаружено совпадение по времени со следующими заявками.\n\n") + text_err
+                    text_err = ("##############################################\n\n"
+                                "Внимание, обнаружено совпадение по времени со следующими заявками:\n\n") + text_err
 
                 # Для автоопределения новая или перенесенная нужна еще одна запись в файл.
                 # Поэтому сначала надо понять если ли в это необходимость.
@@ -198,20 +198,20 @@ def get_html(to):
                                f"{conn_link}\n\n")
                 answer.append(txt_msg_new + text_err)
 
-                print(one_to_list_all)
+                # print(one_to_list_all)
 
         # Обновим json
         try:
             with open(f"{to}/list_numbers.json", 'w') as f:
                 json.dump(list_new_numbers_date, f, sort_keys=False, ensure_ascii=False, indent=4, separators=(',', ': '))
-                print(f"Файл '{to}/list_numbers.json' обновлен.")
+                # print(f"Файл '{to}/list_numbers.json' обновлен.")
         except FileNotFoundError:
             print(f"Файл '{to}/list_numbers.json' не найден.")
 
         try:
             with open(f"{to}/list_all.json", 'w') as f:
                 json.dump(list_all, f, sort_keys=False, ensure_ascii=False, indent=4, separators=(',', ': '))
-                print(f"Файл '{to}/list_all.json' обновлен.")
+                # print(f"Файл '{to}/list_all.json' обновлен.")
         except FileNotFoundError:
             print(f"Файл '{to}/list_all.json' не найден.")
 

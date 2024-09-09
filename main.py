@@ -32,7 +32,7 @@ async def cmd_log(message: types.Message):
 
 
 def start_parser():
-    print(f"start_parser")
+    # print(f"start_parser")
     # asyncio.run(bot.send_message(-4583492531, "test"))
     import parser
 
