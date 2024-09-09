@@ -190,17 +190,15 @@ def get_html(to):
                     text_err = ("------------------------------------------\n\n"
                                 "Внимание, обнаружено совпадение по времени со следующими заявками.\n\n") + text_err
 
-                txt_msg_new = (f"Обнаружена новая заявка:\n\n"
+                # Для автоопределения новая или перенесенная нужна еще одна запись в файл.
+                # Поэтому сначала надо понять если ли в это необходимость.
+                txt_msg_new = (f"Обнаружена новая или перенесенная заявка:\n\n"
                                f"{date}\n\n"
                                f"{address_f}\n\n"
                                f"{conn_link}\n\n")
                 answer.append(txt_msg_new + text_err)
 
                 print(one_to_list_all)
-        # print(f"list_numbers {list_numbers}")
-        # print(f"list_all {list_all}")
-        # for z in list_all:
-        #     print(z)
 
         # Обновим json
         try:

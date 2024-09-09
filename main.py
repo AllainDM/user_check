@@ -39,16 +39,16 @@ def start_parser():
     lst = parser.get_html("west")
     for i in lst:
         time.sleep(config.delay_msg)
-        asyncio.run(bot.send_message(config.chat_id_for_fast, i))
+        asyncio.run(bot.send_message(config.chat_id_for_fast, i, disable_web_page_preview=True))
 
     lst = parser.get_html("north")
     for i in lst:
         time.sleep(config.delay_msg)
-        asyncio.run(bot.send_message(config.chat_id_for_fast, i))
+        asyncio.run(bot.send_message(config.chat_id_for_fast, i, disable_web_page_preview=True))
 
-    if len(lst) == 0:
-        asyncio.run(bot.send_message(config.chat_id_for_fast,
-                                     "Новых нет. Тестовая проверка. Просто проверка что бот не помер."))
+    # if len(lst) == 0:
+    #     asyncio.run(bot.send_message(config.chat_id_for_fast,
+    #                                  "Новых нет. Тестовая проверка. Просто проверка что бот не помер."))
 
 
 
